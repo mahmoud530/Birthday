@@ -64,16 +64,15 @@
       box-sizing: border-box;
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
       background: #2c1d31;
       color: var(--ink);
       font-family: var(--font-body);
-      overflow-x: hidden;
     }
 
     /* ---------- ambient starfield ---------- */
@@ -109,25 +108,66 @@
       }
     }
 
-    /* ---------- scroll container ---------- */
+    /* ---------- full-page slide system ---------- */
     #scroller {
-      position: relative;
+      position: fixed;
+      inset: 0;
       z-index: 1;
-      scroll-snap-type: y mandatory;
-      height: 100dvh;
-      overflow-y: scroll;
+      overflow: hidden;
     }
 
     section {
-      position: relative;
-      min-height: 100dvh;
-      scroll-snap-align: start;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: clamp(28px, 6vw, 80px) clamp(20px, 7vw, 90px);
       text-align: center;
+      /* initial state: hidden below */
+      transform: translateY(100%);
+      transition: transform 0.75s cubic-bezier(0.77, 0, 0.175, 1);
+      will-change: transform;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    section.page-active {
+      transform: translateY(0%);
+    }
+
+    section.page-exit {
+      transform: translateY(-100%);
+    }
+
+    /* progress dots */
+    #page-progress {
+      position: fixed;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .pg-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(234,181,78,0.25);
+      border: 1.5px solid rgba(234,181,78,0.4);
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .pg-dot.pg-active {
+      background: var(--gold-soft);
+      transform: scale(1.5);
     }
 
     .reveal {
@@ -969,11 +1009,71 @@
       }
     })();
 
-    /* ---------------- next-button navigation ---------------- */
+    /* ---------------- full-page slide navigation ---------------- */
+    const sections = Array.from(document.querySelectorAll('section'));
+    let currentPage = 0;
+    let isAnimating = false;
+
+    // Build progress dots
+    const progressBar = document.createElement('div');
+    progressBar.id = 'page-progress';
+    sections.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.className = 'pg-dot' + (i === 0 ? ' pg-active' : '');
+      dot.title = 'Page ' + (i + 1);
+      dot.addEventListener('click', () => goToPage(i));
+      progressBar.appendChild(dot);
+    });
+    document.body.appendChild(progressBar);
+
+    function updateDots() {
+      document.querySelectorAll('.pg-dot').forEach((d, i) => {
+        d.classList.toggle('pg-active', i === currentPage);
+      });
+    }
+
+    function goToPage(index) {
+      if (isAnimating || index === currentPage || index < 0 || index >= sections.length) return;
+      isAnimating = true;
+
+      const fromEl = sections[currentPage];
+      const toEl = sections[index];
+      const direction = index > currentPage ? 1 : -1;
+
+      // Position the incoming page
+      toEl.style.transition = 'none';
+      toEl.style.transform = direction > 0 ? 'translateY(100%)' : 'translateY(-100%)';
+      toEl.classList.add('page-active');
+
+      // Force reflow
+      toEl.offsetHeight;
+
+      // Animate both
+      toEl.style.transition = '';
+      toEl.style.transform = 'translateY(0%)';
+      fromEl.style.transition = 'transform 0.75s cubic-bezier(0.77, 0, 0.175, 1)';
+      fromEl.style.transform = direction > 0 ? 'translateY(-100%)' : 'translateY(100%)';
+
+      currentPage = index;
+      updateDots();
+
+      setTimeout(() => {
+        fromEl.classList.remove('page-active');
+        fromEl.style.transform = '';
+        fromEl.style.transition = '';
+        isAnimating = false;
+      }, 800);
+    }
+
+    // Activate first section
+    sections[0].classList.add('page-active');
+
+    // Wire up all data-next buttons
     document.querySelectorAll('[data-next]').forEach(btn => {
       btn.addEventListener('click', () => {
-        const target = document.getElementById(btn.dataset.next);
-        if (target) target.scrollIntoView({ behavior: 'smooth' });
+        const targetId = btn.dataset.next;
+        const targetIndex = sections.findIndex(s => s.id === targetId);
+        if (targetIndex !== -1) goToPage(targetIndex);
       });
     });
 
@@ -990,7 +1090,10 @@
       if (giftCard.classList.contains('opened')) return;
       giftCard.classList.add('opened');
       tapHint.textContent = 'opening for you…';
-      setTimeout(() => { document.getElementById('s2').scrollIntoView({ behavior: 'smooth' }); }, 750);
+      setTimeout(() => {
+        const s2Index = sections.findIndex(s => s.id === 's2');
+        goToPage(s2Index);
+      }, 750);
     }
     giftCard.addEventListener('click', openGift);
     giftCard.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openGift(); } });
