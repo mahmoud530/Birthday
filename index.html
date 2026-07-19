@@ -64,7 +64,8 @@
       box-sizing: border-box;
     }
 
-    html, body {
+    html,
+    body {
       margin: 0;
       padding: 0;
       width: 100%;
@@ -124,7 +125,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       padding: clamp(28px, 6vw, 80px) clamp(20px, 7vw, 90px);
       text-align: center;
       /* initial state: hidden below */
@@ -133,6 +134,12 @@
       will-change: transform;
       overflow-y: auto;
       overflow-x: hidden;
+    }
+
+    section::before,
+    section::after {
+      content: "";
+      margin: auto;
     }
 
     section.page-active {
@@ -159,8 +166,8 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: rgba(234,181,78,0.25);
-      border: 1.5px solid rgba(234,181,78,0.4);
+      background: rgba(234, 181, 78, 0.25);
+      border: 1.5px solid rgba(234, 181, 78, 0.4);
       cursor: pointer;
       transition: background 0.3s, transform 0.3s;
     }
@@ -219,10 +226,9 @@
 
     /* ---------- next arrow ---------- */
     .next-btn {
-      position: absolute;
-      bottom: clamp(18px, 4vh, 42px);
-      left: 50%;
-      transform: translateX(-50%);
+      position: relative;
+      margin-top: clamp(24px, 5vh, 40px);
+      flex-shrink: 0;
       background: none;
       border: 1.5px solid var(--card-border);
       color: var(--gold-soft);
@@ -241,7 +247,7 @@
     .next-btn:hover {
       border-color: var(--gold);
       background: rgba(234, 181, 78, .08);
-      transform: translateX(-50%) translateY(-3px);
+      transform: translateY(-3px);
     }
 
     .next-btn svg {
@@ -253,11 +259,11 @@
 
       0%,
       100% {
-        transform: translateX(-50%) translateY(0);
+        transform: translateY(0);
       }
 
       50% {
-        transform: translateX(-50%) translateY(6px);
+        transform: translateY(6px);
       }
     }
 
@@ -566,10 +572,11 @@
     .love-list {
       list-style: none;
       padding: 0;
-      margin: 20px 0 0;
+      margin: 20px auto 0;
       display: grid;
       gap: 14px;
       grid-template-columns: repeat(2, minmax(160px, 240px));
+      justify-content: center;
       max-width: 600px;
     }
 
@@ -596,7 +603,7 @@
       font-size: clamp(1.15rem, 3vw, 1.55rem);
       color: var(--ink);
       max-width: 600px;
-      margin: 14px 0;
+      margin: 14px auto;
       position: relative;
     }
 
@@ -739,7 +746,7 @@
 
     @media (max-width:640px) {
       .love-list {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
       }
     }
 
@@ -800,7 +807,7 @@
             </g>
           </svg>
         </div>
-        <div class="to-from">To <b>Nory</b><br>From <b>Mahmoud Allam</b></div>
+        <div class="to-from">To <b>Nory</b><br>From <b>Your Love </b></div>
         <div class="tap-hint" id="tapHint">tap the gift to open</div>
       </div>
     </section>
@@ -880,9 +887,9 @@
         <div class="flame"><svg viewBox="0 0 24 32">
             <use href="#flameshape" />
           </svg></div>
-        <div class="letter-card">
+        <div class="letter-card">   
           <p>كل سنة وحبيبة قلبي ونور عيني بخير وناجحة. ❤️</p>
-          <p>كل سنة وانتي وسط الناس اللي بيحبوكي، وكل سنة وانتي شاطرة وقدّ المسؤولية.</p>
+          <p>كل سنة وانتي وسط الناس اللي بيحبوكي، وكل سنة وانتي شاطرة وقد المسؤولية.</p>
           <p>وكل سنة وانتي معايا، لأن دي أهم حاجة بالنسبة لي.</p>
           <p>انتي الحاجة الوحيدة اللي انا حسيت اني عايز اتغير علشانها، والحاجة الوحيدة اللي حسستني يعني ايه تمسك ويعني
             ايه تحاول علشان شخص ميروحش مني، واللي ربنا رزقني بيها. 🤍</p>
@@ -934,6 +941,7 @@
           <p>قابلنا بعض في وقت مكنش فيه حد بيدور على حد، ولا حد مهتم يدخل علاقة.</p>
           <p>لقينا بعض بالصدفة، ويمكن كانت أحلى صدفة حصلت في حياتنا.</p>
           <p>كسرنا حواجز كتير عشان نوصل للمكان اللي إحنا فيه دلوقتي.</p>
+          <p>استحملتي كتير اوي وعيشتي معايا حاجات وحشه وحلوه وطريقتي الرخمه وعديتي مشاكل كتير جدا طلع مني </p>
           <p>عدينا بأوقات ومشاكل كانت صعبة بشكل ميُتوصفش، وكان في حاجات كتير بتقول إننا مستحيل نكمل، لكن كملنا.</p>
           <p>اتغيرنا، واتعلمنا، واتنازلنا عن حاجات كتير، وجينا على نفسنا مرات كتير، وكل ده علشان نحافظ على اللي بينا.
           </p>
