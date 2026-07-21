@@ -750,6 +750,114 @@
       }
     }
 
+    /* ============ SECTION 10 — secret vault ============ */
+    .vault-card {
+      max-width: 420px;
+      width: 90vw;
+      margin: 0 auto;
+      background: rgba(34, 23, 38, .6);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: clamp(30px, 6vw, 40px);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      transition: opacity 0.5s, transform 0.5s;
+    }
+
+    .vault-card.hidden {
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
+    }
+
+    .vault-input {
+      background: rgba(14, 10, 19, .5);
+      border: 1.5px solid var(--card-border);
+      color: var(--ink);
+      font-family: var(--font-ui);
+      font-size: 1.2rem;
+      padding: 12px 20px;
+      border-radius: 99px;
+      width: 100%;
+      text-align: center;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .vault-input:focus {
+      border-color: var(--gold);
+    }
+
+    .vault-btn {
+      font-family: var(--font-ui);
+      font-weight: 700;
+      font-size: 1rem;
+      color: #fff;
+      background: var(--grad);
+      border: none;
+      padding: 12px 36px;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(236, 95, 170, .25);
+      transition: transform .3s;
+    }
+
+    .vault-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .vault-error {
+      color: var(--rose);
+      font-family: var(--font-ui);
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      min-height: 20px;
+    }
+
+    .vault-content {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+      max-width: 600px;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    .vault-content.active {
+      display: flex;
+    }
+
+    .video-wrapper {
+      width: 100%;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      background: var(--bg-1);
+    }
+
+    .video-wrapper video {
+      width: 100%;
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     /* reduced motion */
     @media (prefers-reduced-motion: reduce) {
 
@@ -807,7 +915,7 @@
             </g>
           </svg>
         </div>
-        <div class="to-from">To <b>Nory</b><br>From <b>Your Love </b></div>
+        <div class="to-from">To <b>Noury</b><br>From <b>Your Love </b></div>
         <div class="tap-hint" id="tapHint">tap the gift to open</div>
       </div>
     </section>
@@ -815,8 +923,8 @@
     <!-- ============ 2. COUNTDOWN ============ -->
     <section id="s2">
       <div class="reveal">
-        <div class="eyebrow">until Nory's birthday</div>
-        <div class="name-script">Nory</div>
+        <div class="eyebrow">until Noury's birthday</div>
+        <div class="name-script">Noury</div>
         <div class="countdown-grid">
           <div class="cd-box">
             <div class="cd-num" id="cd-d">--</div>
@@ -851,7 +959,7 @@
     <section id="s3">
       <div class="reveal">
         <div class="eyebrow">Happy Birthday!</div>
-        <div class="name-script">Nory</div>
+        <div class="name-script">Noury</div>
         <div class="age-badge" id="ageBadge">Turning <b>20</b>!</div>
         <button class="continue-btn" id="continueBtn" data-next="s4">Continue <svg width="16" height="16"
             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -865,7 +973,7 @@
       <div class="reveal">
         <h1 class="display">Happy Birthday!</h1>
         <div class="royal-card">
-          <div class="name-script">Nory</div>
+          <div class="name-script">Noury</div>
           <div class="age-badge" id="ageBadge2" style="margin-bottom:6px;">Turning <b>20</b>!</div>
           <div class="title-line">"My Princess"</div>
           <div class="date-line">August 1</div>
@@ -986,6 +1094,53 @@
         </div>
         <div class="slider-dots" id="dots"></div>
       </div>
+      <button class="next-btn" data-next="s10" aria-label="Next"><svg viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2">
+          <path d="M6 9l6 6 6-6" />
+        </svg></button>
+    </section>
+
+    <!-- ============ 10. SECRET VAULT ============ -->
+    <section id="s10">
+      <div class="reveal">
+        <div class="eyebrow">Top Secret</div>
+        <h1 class="display">The Vault</h1>
+
+        <div class="vault-card" id="vaultCard">
+          <div style="font-family: var(--font-body); font-size: 1.2rem; color: var(--ink); margin-bottom: 8px;">
+            Enter the secret code to unlock your final surprise.
+          </div>
+          <input type="password" id="vaultInput" class="vault-input" placeholder="Password" />
+          <div class="vault-error" id="vaultError">Incorrect password, try again!</div>
+          <button class="vault-btn" id="vaultSubmit">Unlock</button>
+        </div>
+
+        <div class="vault-content" id="vaultContent">
+          <div
+            style="font-family: var(--font-body); font-size: 1.3rem; color: var(--gold-soft); font-style: italic; margin-bottom: 16px;">
+            You made it! Here is a little something for you...
+          </div>
+          <div class="video-wrapper">
+            <video id="vaultVideo" controls style="width: 100%; border-radius: 12px;">
+              <source src="./photos/ved.mp4" type="video/mp4">
+            </video>
+          </div>
+          <button class="next-btn" style="margin-top:20px;" data-next="s11" aria-label="Next">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" /></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 11. ENDING ============ -->
+    <section id="s11">
+      <div class="reveal">
+        <h1 class="display" style="color: var(--rose);">Happy Birthday!</h1>
+        <div class="dream-line" style="text-align:center;">Thank you for being my everything.</div>
+        <div class="dream-line" style="text-align:center; color: var(--gold-soft);">I love you forever my stupid . ❤️</div>
+        
+        <button class="vault-btn" style="margin-top: 40px;" data-next="s1">Replay our memories</button>
+      </div>
     </section>
 
   </div>
@@ -1022,6 +1177,12 @@
     let currentPage = 0;
     let isAnimating = false;
 
+    function isBirthday() {
+      // const now = new Date();
+      // return now.getMonth() === 7 && now.getDate() === 1;
+      return true;
+    }
+
     // Build progress dots
     const progressBar = document.createElement('div');
     progressBar.id = 'page-progress';
@@ -1042,6 +1203,11 @@
 
     function goToPage(index) {
       if (isAnimating || index === currentPage || index < 0 || index >= sections.length) return;
+
+      if (index > 1 && !isBirthday()) {
+        alert("It's not your birthday yet! Wait for the countdown. 😉");
+        return;
+      }
       isAnimating = true;
 
       const fromEl = sections[currentPage];
@@ -1111,7 +1277,8 @@
       const now = new Date();
       let year = now.getFullYear();
       let target = new Date(year, 7, 1, 0, 0, 0, 0);
-      if (target <= now) target = new Date(year + 1, 7, 1, 0, 0, 0, 0);
+      if (isBirthday()) return now; // It's today! Diff will be 0.
+      if (target < now) target = new Date(year + 1, 7, 1, 0, 0, 0, 0);
       return target;
     }
     const BIRTH_YEAR = 2005;
@@ -1120,6 +1287,9 @@
       const now = new Date();
       let diff = target - now;
       if (diff < 0) diff = 0;
+
+      const isBday = isBirthday();
+
       const d = Math.floor(diff / 86400000);
       const h = Math.floor(diff % 86400000 / 3600000);
       const m = Math.floor(diff % 3600000 / 60000);
@@ -1131,16 +1301,37 @@
       document.getElementById('cd-s').textContent = String(s).padStart(2, '0');
       document.getElementById('cd-ms').textContent = String(ms).padStart(3, '0');
 
-      const turning = target.getFullYear() - BIRTH_YEAR;
+      const turning = (isBday ? now.getFullYear() : target.getFullYear()) - BIRTH_YEAR;
       document.querySelectorAll('#ageBadge, #ageBadge2').forEach(el => {
         el.innerHTML = 'Turning <b>' + turning + '</b>!';
+      });
+
+      // Show or hide skip buttons based on birthday
+      const s2 = document.getElementById('s2');
+      const skipBtn = s2.querySelector('.skip-link');
+      const nextBtn = s2.querySelector('.next-btn');
+      if (isBday) {
+        if (skipBtn) { skipBtn.style.display = 'inline-block'; skipBtn.textContent = 'Continue to the surprise!'; }
+        if (nextBtn) nextBtn.style.display = 'flex';
+      } else {
+        if (skipBtn) skipBtn.style.display = 'none';
+        if (nextBtn) nextBtn.style.display = 'none';
+      }
+
+      // Hide or show dots for sections > 1
+      document.querySelectorAll('.pg-dot').forEach((dot, i) => {
+        if (i > 1 && !isBday) {
+          dot.style.display = 'none';
+        } else {
+          dot.style.display = 'block';
+        }
       });
     }
     updateCountdown();
     setInterval(updateCountdown, 47);
 
     /* ---------------- celebration burst ---------------- */
-    document.getElementById('continueBtn').addEventListener('click', () => {
+    function fireConfetti() {
       const burst = document.getElementById('burst');
       const colors = ['#eab54e', '#f6cf7f', '#ec5faa', '#c23f86'];
       for (let i = 0; i < 28; i++) {
@@ -1162,12 +1353,14 @@
         burst.appendChild(p);
         setTimeout(() => p.remove(), 1700);
       }
-    });
+    }
+
+    document.getElementById('continueBtn').addEventListener('click', fireConfetti);
 
     /* ---------------- gallery: photo slider ---------------- */
     const track = document.getElementById('galleryTrack');
     const dotsWrap = document.getElementById('dots');
-    const TOTAL_PHOTOS = 30;
+    const TOTAL_PHOTOS = 31;
     for (let i = 1; i <= TOTAL_PHOTOS; i++) {
       const slide = document.createElement('div');
       slide.className = 'slide missing';
@@ -1214,6 +1407,39 @@
         dots.forEach((d, i) => d.classList.toggle('active', i === idx));
       }, 60);
     });
+
+    /* ---------------- secret vault ---------------- */
+    const vaultInput = document.getElementById('vaultInput');
+    const vaultSubmit = document.getElementById('vaultSubmit');
+    const vaultError = document.getElementById('vaultError');
+    const vaultCard = document.getElementById('vaultCard');
+    const vaultContent = document.getElementById('vaultContent');
+    const vaultVideo = document.getElementById('vaultVideo');
+
+    function checkVault() {
+      if (vaultInput.value.trim() === '88') {
+        vaultCard.classList.add('hidden');
+        vaultContent.classList.add('active');
+        fireConfetti(); // pops some confetti!
+      } else {
+        vaultError.style.opacity = '1';
+        setTimeout(() => { vaultError.style.opacity = '0'; }, 3000);
+      }
+    }
+
+    if (vaultSubmit) {
+      vaultSubmit.addEventListener('click', checkVault);
+      vaultInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') checkVault();
+      });
+    }
+
+    if (vaultVideo) {
+      vaultVideo.addEventListener('ended', () => {
+        const targetIndex = sections.findIndex(s => s.id === 's11');
+        if (targetIndex !== -1) goToPage(targetIndex);
+      });
+    }
   </script>
 </body>
 
