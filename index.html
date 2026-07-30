@@ -858,6 +858,45 @@
       }
     }
 
+    /* ============ WISHING STAR ============ */
+    .shooting-star {
+      position: fixed;
+      width: 4px;
+      height: 4px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8), 0 0 20px 4px var(--gold-soft);
+      z-index: 9999;
+      pointer-events: none;
+      animation: shoot 2s ease-out forwards;
+    }
+
+    .shooting-star::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: 50%;
+      width: 150px;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.8), transparent);
+      transform: translateY(-50%);
+      border-radius: 100%;
+    }
+
+    @keyframes shoot {
+      0% {
+        transform: translate(-10vw, 90vh) rotate(-45deg) scale(0.5);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      100% {
+        transform: translate(110vw, -10vh) rotate(-45deg) scale(1.5);
+        opacity: 0;
+      }
+    }
+
     /* reduced motion */
     @media (prefers-reduced-motion: reduce) {
 
@@ -1125,11 +1164,32 @@
               <source src="./photos/ved1.mp4" type="video/mp4">
             </video>
           </div>
-          <button class="next-btn" style="margin-top:20px;" data-next="s11" aria-label="Next">
+          <button class="next-btn" style="margin-top:20px;" data-next="s-wish" aria-label="Next">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" /></svg>
           </button>
         </div>
       </div>
+    </section>
+
+    <!-- ============ WISHING STAR ============ -->
+    <section id="s-wish">
+      <div class="reveal">
+        <div class="eyebrow">Make a Wish</div>
+        <h1 class="display">A Star for You</h1>
+        <div class="dream-line" style="font-size: 1.1rem; max-width: 500px; text-align: center;">The night sky is yours. What do you wish for?</div>
+        
+        <div class="wish-container" style="margin-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 16px;">
+          <input type="text" id="wishInput" class="vault-input" placeholder="Type your wish here..." style="max-width: 400px; text-align: left;">
+          <button class="vault-btn" id="wishBtn">Send to the Stars ✨</button>
+        </div>
+        
+        <div id="wishMessage" style="margin-top: 24px; font-family: var(--font-body); font-style: italic; color: var(--gold-soft); font-size: 1.3rem; opacity: 0; transition: opacity 1s;">
+          Your wish is written in the stars... 🌟
+        </div>
+      </div>
+      <button class="next-btn" data-next="s11" aria-label="Next" style="margin-top: 30px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" /></svg>
+      </button>
     </section>
 
     <!-- ============ 11. ENDING ============ -->
@@ -1435,8 +1495,38 @@
 
     if (vaultVideo) {
       vaultVideo.addEventListener('ended', () => {
-        const targetIndex = sections.findIndex(s => s.id === 's11');
+        const targetIndex = sections.findIndex(s => s.id === 's-wish');
         if (targetIndex !== -1) goToPage(targetIndex);
+      });
+    }
+
+    /* ---------------- wishing star ---------------- */
+    const wishBtn = document.getElementById('wishBtn');
+    const wishInput = document.getElementById('wishInput');
+    const wishMessage = document.getElementById('wishMessage');
+
+    if (wishBtn) {
+      wishBtn.addEventListener('click', () => {
+        if (wishInput.value.trim() === '') return;
+        
+        wishInput.style.display = 'none';
+        wishBtn.style.display = 'none';
+        
+        const star = document.createElement('div');
+        star.className = 'shooting-star';
+        document.body.appendChild(star);
+        
+        setTimeout(() => {
+          wishMessage.style.opacity = '1';
+        }, 1200);
+        
+        setTimeout(() => {
+          star.remove();
+        }, 2200);
+      });
+      
+      wishInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') wishBtn.click();
       });
     }
   </script>
